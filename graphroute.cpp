@@ -1,14 +1,16 @@
 // Diwei V. Nicolay - 193014
 
+#include "digraph.cpp"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
 int menu(){
     int opcao;
     while (true) {
-        cout << "======================================================\n"
+        cout << "\n======================================================\n"
              << "\x1b[31m1\x1b[0m. Exibir Grafo Completo\n"
              << "\x1b[31m2\x1b[0m. Encontrar Menor Caminho\n"
              << "\x1b[31m3\x1b[0m. Calcular o Diâmetro do Grafo\n"
@@ -40,6 +42,36 @@ int main(int argc, char* argv[]){
         cout << "\x1b[31m[Erro] Não foi possivel abrir o arquivo \x1b[34m'" << argv[1] << "'\x1b[0m\n";
         return 1;
     }
+
+    UPF::digraph<string> rotas;
+    string linha;
+    getline(arq, linha);
+
+    while(getline(arq,linha)){
+        stringstream ss(linha);
+        string prb_id, probe_src, dst_addr, hop, hop_from, hop_to, rtt;
+
+        getline(ss, prb_id, ',');
+        getline(ss, probe_src, ',');
+        getline(ss, dst_addr, ',');
+        getline(ss, hop, ',');
+        getline(ss, hop_from, ',');
+        getline(ss, hop_to, ',');
+        getline(ss, rtt, ',');
+
+        if(hop_to=="*"||hop_from==""||hop_to==""){
+            continue;
+        }
+        rotas.insert_node(hop_from);
+        rotas.insert_node(hop_to);
+        rotas.insert_link(hop_from, hop_to);
+    }
+
+    arq.close();
+
+    cout << "\x1b[32mGrafo de roteamento inicializado!\x1b[0m\n"
+         << "Vértices únicos (IPs): " << rotas.qtdVertices()
+         << " | Arestas: " << rotas.qtdArestas() << "\n";
 
     int opcao;
 
