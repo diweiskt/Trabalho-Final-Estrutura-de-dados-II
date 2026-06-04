@@ -1,6 +1,7 @@
 // Diwei V. Nicolay - 193014
 
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -26,7 +27,19 @@ int menu(){
 }
 
 
-int main(){
+int main(int argc, char* argv[]){
+
+    if(argc != 2){
+        cout << "\x1b[31m[Erro] Você não passou um caminho de um arquivo de log de traceroute\x1b[0m\n";
+        return 1;
+    }
+
+    ifstream arq;
+    arq.open(argv[1]);
+    if(!arq){
+        cout << "\x1b[31m[Erro] Não foi possivel abrir o arquivo \x1b[34m'" << argv[1] << "'\x1b[0m\n";
+        return 1;
+    }
 
     int opcao;
 
@@ -47,7 +60,7 @@ int main(){
             //identificarRoteadoresCriticos();
             break;
         case 0:
-            cout << "Encerrando analisador de rotas.\n";
+            cout << "\x1b[34mEncerrando analisador de rotas.\x1b[0m\n";
             break;
         }
     } while (opcao != 0);
