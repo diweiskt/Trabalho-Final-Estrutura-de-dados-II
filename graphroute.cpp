@@ -80,7 +80,21 @@ int main(int argc, char* argv[]){
 
         switch (opcao) {
         case 1:
-            //exibirGrafoCompleto();
+            int subOpcao;
+            cout << "\x1b[32mExibir Grafo Completo\n"
+                 << "\x1b[31m1\x1b[0m. Visualizar na Tela\n"
+                 << "\x1b[31m2\x1b[0m. Gerar Imagem PNG\n"
+                 << "\x1b[31m3\x1b[0m. Gerar Documento PDF\n"
+                 << "Escolha o formato de saída: ";
+            cin >> subOpcao;
+            cin.ignore();
+
+            if(subOpcao >= 1 && subOpcao <= 3){
+                rotas.exibirGrafoCompleto(argv[1], subOpcao);
+            }
+            else{
+                cout << "\x1b[31mOpção Inválida.\x1b[0m\n";
+            }
             break;
         case 2:
             //encontrarMenorCaminho();
@@ -92,7 +106,7 @@ int main(int argc, char* argv[]){
             //identificarRoteadoresCriticos();
             break;
         case 0:
-            cout << "\x1b[34mEncerrando analisador de rotas.\x1b[0m\n";
+            cout << "\x1b[31mEncerrando analisador de rotas.\x1b[0m\n";
             break;
         }
     } while (opcao != 0);
