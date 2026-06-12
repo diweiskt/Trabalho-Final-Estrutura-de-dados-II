@@ -28,6 +28,54 @@ int menu(){
     }
 }
 
+int subMenuSaida(const string& titulo){
+    int subOpcao;
+    cout << "\x1b[36m\n" << titulo << "\x1b[0m\n"
+         << "\x1b[31m1\x1b[0m. Tela\n"
+         << "\x1b[31m2\x1b[0m. Imagem (PNG)\n"
+         << "\x1b[31m3\x1b[0m. Documento (PDF)\n"
+         << "Opção: ";
+    cin >> subOpcao;
+    cin.ignore();
+    return subOpcao;
+}
+
+void path(UPF::digraph<string>& rede, const string& nomeArquivoOriginal){
+    string origem,destino;
+
+    cout << "Digite o IP de Origem: ";
+    cin >> origem;
+    cout << "Digite o IP de Destino: ";
+    cin >> destino;
+
+    auto path = rede.encontrarMenorCaminho(origem, destino);
+    if (path.empty()) {
+        cout << "\n\x1b[31mNenhum caminho encontrado\x1b[0m\n";
+    }
+    else {
+        cout << "\n\x1b[32mCaminho encontrado (" << path.size() - 1 << " saltos):\x1b[0m\n";
+
+        bool primeiro = true;
+
+        for (auto p : path){
+            if(!primeiro)
+                cout << "\x1b[32m -> \x1b[0m";
+            cout << "\x1b[32m" << p->value << "\x1b[0m";
+            primeiro = false;
+        }
+        cout << "\n";
+
+        int subOpcao = subMenuSaida("Selecione o formato de saída do Graphviz:");
+
+        if(subOpcao >= 1 && subOpcao <= 3){
+            rede.exibirCaminhoDestacado(nomeArquivoOriginal, subOpcao, path);
+        }
+        else{
+            cout << "\x1b[31m\nOpção Inválida.\x1b[0m\n";
+        }
+    }
+}
+
 
 int main(int argc, char* argv[]){
 
@@ -77,27 +125,21 @@ int main(int argc, char* argv[]){
 
     do {
         opcao = menu();
+        int subOpcao;
 
         switch (opcao) {
         case 1:
-            int subOpcao;
-            cout << "\x1b[32mExibir Grafo Completo\n"
-                 << "\x1b[31m1\x1b[0m. Visualizar na Tela\n"
-                 << "\x1b[31m2\x1b[0m. Gerar Imagem PNG\n"
-                 << "\x1b[31m3\x1b[0m. Gerar Documento PDF\n"
-                 << "Escolha o formato de saída: ";
-            cin >> subOpcao;
-            cin.ignore();
+            subOpcao =  subMenuSaida("Selecione o formato de saída do Graphviz:");
 
             if(subOpcao >= 1 && subOpcao <= 3){
                 rotas.exibirGrafoCompleto(argv[1], subOpcao);
             }
             else{
-                cout << "\x1b[31mOpção Inválida.\x1b[0m\n";
+                cout << "\x1b[31m\nOpção Inválida.\x1b[0m\n";
             }
             break;
         case 2:
-            //encontrarMenorCaminho();
+            path(rotas, argv[1]);
             break;
         case 3:
             //calcularDiametroGrafo();
@@ -106,7 +148,7 @@ int main(int argc, char* argv[]){
             //identificarRoteadoresCriticos();
             break;
         case 0:
-            cout << "\x1b[31mEncerrando analisador de rotas.\x1b[0m\n";
+            cout << "\x1b[31mEncerrando analisador de rotas.\x1b[0m\n\n";
             break;
         }
     } while (opcao != 0);
