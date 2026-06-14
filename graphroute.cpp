@@ -117,7 +117,7 @@ int main(int argc, char* argv[]){
 
     arq.close();
 
-    cout << "\x1b[32mGrafo de roteamento inicializado!\x1b[0m\n"
+    cout << "\n\x1b[32mGrafo de roteamento inicializado!\x1b[0m\n"
          << "Vértices únicos (IPs): " << rotas.qtdVertices()
          << " | Arestas: " << rotas.qtdArestas() << "\n";
 
@@ -142,7 +142,7 @@ int main(int argc, char* argv[]){
             path(rotas, argv[1]);
             break;
         case 3:
-            //calcularDiametroGrafo();
+            rotas.calcularDiametroGrafo();
             break;
         case 4:
             //identificarRoteadoresCriticos();

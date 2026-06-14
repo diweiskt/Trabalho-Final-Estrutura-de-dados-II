@@ -228,5 +228,50 @@ public:
             std::system(comando.c_str());
         }
     }
+
+    void calcularDiametroGrafo(){
+
+        int diametroMaxGlobal = 0;
+
+        for(const auto& [ipOrigem, noAtual] : graph){
+
+            auto pstart = find(ipOrigem);
+            if (!pstart) continue;
+
+            std::queue<node*> fila;
+            std::unordered_set<node*> queued;
+            std::unordered_map<node*, int> distancia;
+
+            int maiorDistanciaLocal = 0;    
+
+            fila.push(pstart);
+            queued.insert(pstart);
+            distancia[pstart] = 0;
+
+            while (!fila.empty()) {
+                auto atual = fila.front();
+                fila.pop();
+
+                for (auto vizinho : atual->links) {
+                    if (queued.count(vizinho) == 0) {
+                        fila.push(vizinho);
+                        queued.insert(vizinho);
+                        distancia[vizinho] = distancia[atual] + 1;
+
+                        if(distancia[vizinho] > maiorDistanciaLocal){
+                            maiorDistanciaLocal = distancia[vizinho];
+                        }
+                    }
+                }            
+            }
+
+            if(maiorDistanciaLocal > diametroMaxGlobal){
+                diametroMaxGlobal = maiorDistanciaLocal;
+            }
+        }
+
+        std::cout << "\x1b[32mDiâmetro do grafo: " << diametroMaxGlobal << " Saltos\x1b[0m\n";
+    }
+
 };
 }
