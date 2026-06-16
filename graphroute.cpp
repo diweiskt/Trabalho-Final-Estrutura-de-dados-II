@@ -145,7 +145,7 @@ int main(int argc, char* argv[]){
             rotas.calcularDiametroGrafo();
             break;
         case 4:
-            //identificarRoteadoresCriticos();
+            rotas.identificarRoteadoresCriticos();
             break;
         case 0:
             cout << "\x1b[31mEncerrando analisador de rotas.\x1b[0m\n\n";

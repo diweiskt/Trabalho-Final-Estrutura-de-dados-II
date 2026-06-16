@@ -273,5 +273,36 @@ public:
         std::cout << "\x1b[32mDiâmetro do grafo: " << diametroMaxGlobal << " Saltos\x1b[0m\n";
     }
 
+    void identificarRoteadoresCriticos(){
+
+        std::unordered_map<node*, int> grauEntrada;
+
+        for(auto &par : graph){
+            node* roteadorAtual = &par.second;
+
+            for(node* vizinho : roteadorAtual->links){
+                grauEntrada[vizinho] += 1;
+            }
+        }
+
+        std::vector<std::pair<node*, int>> ranking;
+
+        for(const auto& par : grauEntrada){
+            ranking.push_back(par);
+        }
+
+        std::sort(ranking.begin(),ranking.end(), [](const auto &a, const auto &b){
+            return a.second > b.second;
+        });
+
+        std::cout << "\x1b[36mTop 5 Roteadores Críticos\x1b[0m\n";
+
+        for(int i=0;i<5 && i<ranking.size();i++){
+            node* roteadorTop = ranking[i].first;
+            int pontuacao = ranking[i].second;
+
+            std::cout << "\x1b[32m" << i+1 << "° lugar: " << roteadorTop->value << " (" << pontuacao << " conexões de entrada)\x1b[0m\n";
+        }
+    }
 };
 }
